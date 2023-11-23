@@ -1,2 +1,75 @@
-# TODO: Create your Kivy layout in the kv language here
 BoxLayout:
+    orientation: 'horizontal'
+
+    # Left panel: Inputs and sorting.
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_x: None
+        width: 300
+        spacing: 10
+        padding: 10
+
+        Label:
+            text: 'Sort by:'
+        Spinner:
+            id: sort_spinner
+            text: 'Artist'
+            values: ['Artist', 'Title', 'Year', 'Learned']
+            on_text: app.sort_songs(self.text)
+
+        # Text inputs for adding a new song.
+        TextInput:
+            id: title_input
+            hint_text: 'Title'
+            multiline: False
+        TextInput:
+            id: artist_input
+            hint_text: 'Artist'
+            multiline: False
+        TextInput:
+            id: year_input
+            hint_text: 'Year'
+            multiline: False
+
+        # Buttons for adding and clearing songs.
+        Button:
+            text: 'Add Song'
+            on_release: app.add_song()
+        Button:
+            text: 'Clear'
+            on_release: app.clear_inputs()
+
+    # Right panel: Song list and status.
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_x: None
+        width: 500
+
+        # Labels for song counts.
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 30
+
+            Label:
+                text: "To Learn: {}".format(app.to_learn)
+            Label:
+                text: "Learned: {}".format(app.learned)
+
+        # Scroll view for song list.
+        ScrollView:
+            size_hint_x: 1
+
+            GridLayout:
+                id: songs_box
+                cols: 1
+                size_hint_y: 1
+                height: 200
+                width: 200
+
+        # Label for status messages.
+        Label:
+            id: status_label
+            size_hint_y: None
+            height: 30
+            text: app.status_text
